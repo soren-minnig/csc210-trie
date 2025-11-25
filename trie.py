@@ -6,7 +6,6 @@ class TrieNode:
 class Trie:
     def __init__(self):
         self.root = TrieNode()
-        self.count = 0 # Not necessary but useful for debugging
 
     def add(self, word):
         node = self.root # Set initial node to root
@@ -26,6 +25,15 @@ class Trie:
             node = node.children[char] # Move to next node
         return node.is_word # If marked as is_word will return true
     
+    def is_prefix(self, prefix):
+        node = self.root # Set initial node to root
+
+        for char in prefix: # For each character
+            if char not in node.children:
+                return False # The prefix does not exist
+            node = node.children[char] # Move to next node
+        return True # The prefix does exist
+        
 # Testing
 trie = Trie()
 running = True
@@ -34,7 +42,7 @@ command = ""
 word = ""
 
 while running:
-    command = input("Choose a command (add or search or end): ")
+    command = input("Choose a command (add/search/prefix/end): ")
     if (command == "add"):
         word = input("Enter a word to add: ")
         trie.add(word)
@@ -46,6 +54,13 @@ while running:
             print(f"{word} exists")
         else:
             print(f"{word} does not exist")
+    elif (command == "prefix"):
+        prefix = input("Enter a prefix to search: ")
+        found = trie.is_prefix(prefix)
+        if found:
+            print(f"{prefix} exists")
+        else:
+            print(f"{prefix} does not exist")
     elif (command == "end"):
         running = False
     else:
